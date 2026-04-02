@@ -37,19 +37,23 @@ class AppStrings {
       'question': 'Question',
       'results': 'Results',
       'score': 'Score',
+      'questionsCorrect': 'Questions Correct',
       'rerunChapter': 'Rerun Chapter',
       'home': 'Home',
       'nextChapter': 'Next Chapter',
+      'skipHardChapter': 'Skip Hard Chapter',
       'language': 'Language',
       'sound': 'Sound',
       'haptics': 'Haptics',
       'resetProgress': 'Reset Progress',
+      'progressReset': 'Progress reset',
       'confirmResetTitle': 'Reset all progress?',
       'confirmResetMessage':
           'All chapter progress, stars, scores, and history will be lost.',
       'cancel': 'Cancel',
       'confirm': 'Reset',
       'correctResults': 'Show Correct Results',
+      'quizAdBannerPlaceholder': 'Ad banner • clearly separated',
     },
   };
 

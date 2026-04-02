@@ -15,8 +15,4 @@ class QuizRepository {
   Future<void> saveRun(QuizRunResult result) {
     return _database.saveRunResult(result);
   }
-
-  Future<int?> nextChapterId(int chapterId) {
-    return _database.nextChapterId(chapterId);
-  }
 }

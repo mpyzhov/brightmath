@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/app_providers.dart';
 import '../../../core/localization/app_strings.dart';
 import '../../chapters/presentation/chapters_controller.dart';
 import 'settings_controller.dart';
@@ -96,12 +97,14 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     );
                     if (confirmed == true) {
-                      await ref.read(appDatabaseProvider).resetProgress();
+                      await ref
+                          .read(chaptersRepositoryProvider)
+                          .resetProgress();
                       ref.invalidate(chaptersListProvider);
                       ref.invalidate(startStatsProvider);
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Progress reset')),
+                          SnackBar(content: Text(strings.t('progressReset'))),
                         );
                       }
                     }

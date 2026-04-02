@@ -1,11 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/settings_repository.dart';
+import '../../../app/app_providers.dart';
 import '../domain/user_settings.dart';
-
-final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
-  return SettingsRepository();
-});
 
 class SettingsController extends AsyncNotifier<UserSettings> {
   @override

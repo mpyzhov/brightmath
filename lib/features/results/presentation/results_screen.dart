@@ -55,7 +55,7 @@ class ResultsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Questions Correct',
+                        strings.t('questionsCorrect'),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(height: 12),
@@ -120,12 +120,12 @@ class ResultsScreen extends StatelessWidget {
                   width: double.infinity,
                   child: FilledButton.tonal(
                     onPressed: onSkipHard,
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.fast_forward_rounded, size: 18),
-                        SizedBox(width: 8),
-                        Text('Skip Hard Chapter'),
+                        const Icon(Icons.fast_forward_rounded, size: 18),
+                        const SizedBox(width: 8),
+                        Text(strings.t('skipHardChapter')),
                       ],
                     ),
                   ),
