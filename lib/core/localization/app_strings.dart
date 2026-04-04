@@ -36,6 +36,7 @@ class AppStrings {
       'timeLeft': 'Time left',
       'question': 'Question',
       'results': 'Results',
+      'runSummary': 'Run Summary',
       'score': 'Score',
       'questionsCorrect': 'Questions Correct',
       'rerunChapter': 'Rerun Chapter',

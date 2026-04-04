@@ -67,7 +67,7 @@ void main() {
 
     expect(find.text('Next Chapter'), findsOneWidget);
     expect(find.text('Skip Hard Chapter'), findsOneWidget);
-    expect(find.text('Show Correct Results'), findsOneWidget);
+    expect(find.text('Show Correct Results (Ad)'), findsOneWidget);
   });
 
   testWidgets('hides gated actions when they are not applicable', (

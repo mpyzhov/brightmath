@@ -27,112 +27,52 @@ class StartScreen extends ConsumerWidget {
           child: Column(
             children: [
               Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  strings.t('appTitle'),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineMedium?.copyWith(fontSize: 42),
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: onSettings,
+                  icon: const Icon(
+                    Icons.settings_rounded,
+                    color: AppTheme.navy,
+                    size: 28,
+                  ),
                 ),
               ),
-              const SizedBox(height: 14),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [AppTheme.navy, AppTheme.navyDark],
-                  ),
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x28000000),
-                      blurRadius: 14,
-                      offset: Offset(0, 8),
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  children: const [
-                    Icon(
-                      Icons.calculate_rounded,
-                      size: 84,
-                      color: Colors.white,
-                    ),
-                    SizedBox(height: 12),
-                    Text(
-                      '+   -   ×   ÷',
-                      style: TextStyle(
-                        color: Color(0xE6FFFFFF),
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
+              const Spacer(flex: 2),
+              Text(
+                strings.t('appTitle'),
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontSize: 48,
+                  color: AppTheme.navyDark,
                 ),
               ),
-              const SizedBox(height: 18),
-              Row(
-                children: [
-                  Expanded(
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppTheme.teal,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: onStart,
-                      child: Text(strings.t('startGame')),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppTheme.navy,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: IconButton(
-                      onPressed: onSettings,
-                      icon: const Icon(
-                        Icons.settings_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 32),
               stats.when(
                 data: (value) => Card(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      vertical: 16,
-                      horizontal: 12,
+                      vertical: 20,
+                      horizontal: 16,
                     ),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Expanded(
-                          child: _StatItem(
-                            icon: Icons.check_circle_rounded,
-                            label: strings.t('completedChapters'),
-                            value: '${value.completedChapters}',
-                          ),
+                        _StatItem(
+                          icon: Icons.check_circle_rounded,
+                          label: strings.t('completedChapters'),
+                          value: '${value.completedChapters}',
                         ),
+                        const SizedBox(width: 24),
                         Container(
                           width: 1,
                           height: 44,
                           color: const Color(0xFFE8EDF3),
                         ),
-                        Expanded(
-                          child: _StatItem(
-                            icon: Icons.star_rounded,
-                            label: strings.t('totalStars'),
-                            value: '${value.totalStars}',
-                          ),
+                        const SizedBox(width: 24),
+                        _StatItem(
+                          icon: Icons.star_rounded,
+                          label: strings.t('totalStars'),
+                          value: '${value.totalStars}',
+                          iconColor: AppTheme.gold,
                         ),
                       ],
                     ),
@@ -141,7 +81,25 @@ class StartScreen extends ConsumerWidget {
                 loading: () => const CircularProgressIndicator(),
                 error: (e, _) => Text('$e'),
               ),
-              const Spacer(),
+              const SizedBox(height: 48),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppTheme.teal,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                  ),
+                  onPressed: onStart,
+                  child: Text(
+                    strings.t('startGame'),
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+              const Spacer(flex: 3),
             ],
           ),
         ),
@@ -155,23 +113,26 @@ class _StatItem extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.value,
+    this.iconColor = AppTheme.teal,
   });
 
   final IconData icon;
   final String label;
   final String value;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: AppTheme.teal),
-        const SizedBox(height: 4),
+        Icon(icon, color: iconColor, size: 28),
+        const SizedBox(height: 8),
         Text(
           value,
-          style: Theme.of(
-            context,
-          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
+            fontSize: 24,
+          ),
         ),
         const SizedBox(height: 4),
         Text(label, textAlign: TextAlign.center),

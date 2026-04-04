@@ -40,13 +40,13 @@ class ResultsScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(22),
                   child: Column(
                     children: [
-                      const Icon(
-                        Icons.emoji_events_rounded,
-                        color: AppTheme.gold,
+                      Text(
+                        strings.t('runSummary'),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: AppTheme.navyDark,
+                        ),
                       ),
-                      const SizedBox(height: 6),
-                      Text(strings.t('score')),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 16),
                       Text(
                         '${result.correctCount} / ${result.totalCount}',
                         style: Theme.of(
@@ -58,7 +58,7 @@ class ResultsScreen extends StatelessWidget {
                         strings.t('questionsCorrect'),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
@@ -92,7 +92,7 @@ class ResultsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               if (result.starsEarned >= 1)
                 SizedBox(
                   width: double.infinity,
@@ -100,7 +100,7 @@ class ResultsScreen extends StatelessWidget {
                     style: FilledButton.styleFrom(
                       backgroundColor: AppTheme.teal,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(28),
                       ),
                     ),
                     onPressed: onNextChapter,
@@ -115,7 +115,7 @@ class ResultsScreen extends StatelessWidget {
                   ),
                 ),
               if (showSkipHard) ...[
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton.tonal(
@@ -131,27 +131,29 @@ class ResultsScreen extends StatelessWidget {
                   ),
                 ),
               ],
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: onTrail,
-                      icon: const Icon(Icons.map_rounded, size: 18),
-                      label: Text(strings.t('chapterTrail')),
+              const SizedBox(height: 12),
+              if (hasIncorrect)
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppTheme.navy,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                    ),
+                    onPressed: null, // Gated by ad
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('${strings.t('correctResults')} (Ad)'),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.lock_rounded, size: 16),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: onHome,
-                      icon: const Icon(Icons.home_rounded, size: 18),
-                      label: Text(strings.t('home')),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
+                ),
+              const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
@@ -160,22 +162,24 @@ class ResultsScreen extends StatelessWidget {
                   label: Text(strings.t('rerunChapter')),
                 ),
               ),
-              const SizedBox(height: 10),
-              if (hasIncorrect)
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton.tonal(
-                    onPressed: null,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(strings.t('correctResults')),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.lock_rounded, size: 16),
-                      ],
-                    ),
-                  ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: onHome,
+                  icon: const Icon(Icons.home_rounded, size: 18),
+                  label: Text(strings.t('home')),
                 ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: onTrail,
+                  icon: const Icon(Icons.map_rounded, size: 18),
+                  label: Text(strings.t('chapterTrail')),
+                ),
+              ),
             ],
           ),
         ),

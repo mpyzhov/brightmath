@@ -121,21 +121,16 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         leading: IconButton(
           onPressed: _handleBack,
           icon: const Icon(Icons.arrow_back_rounded),
         ),
-        title: Text(strings.t('quiz')),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.volume_up_rounded),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.settings_rounded),
-          ),
-        ],
+        title: Text(
+          strings.t(widget.chapterTitle),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -294,19 +289,21 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
                                         child: FilledButton(
                                           style: FilledButton.styleFrom(
                                             backgroundColor:
-                                                background ?? AppTheme.teal,
-                                            foregroundColor: Colors.white,
+                                                background ?? Colors.white,
+                                            foregroundColor: background != null
+                                                ? Colors.white
+                                                : AppTheme.navyDark,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(10),
+                                                  BorderRadius.circular(12),
                                             ),
+                                            elevation: 3,
                                             side: BorderSide(
                                               color: isSelected
-                                                  ? Colors.white.withValues(
-                                                      alpha: 0.85,
-                                                    )
+                                                  ? (background ??
+                                                        AppTheme.teal)
                                                   : Colors.transparent,
-                                              width: 1.2,
+                                              width: 2,
                                             ),
                                           ),
                                           onPressed: runState.isLocked
@@ -359,9 +356,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
                     child: FilledButton(
                       onPressed: () => unawaited(controller.nextOrFinish()),
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppTheme.navy,
+                        backgroundColor: AppTheme.teal,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(32),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
