@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/app_providers.dart';
 import '../../../core/localization/app_strings.dart';
+import '../../../core/localization/language_native_names.dart';
 import '../../chapters/presentation/chapters_controller.dart';
 import 'settings_controller.dart';
 
@@ -27,28 +28,39 @@ class SettingsScreen extends ConsumerWidget {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(strings.t('language')),
-                            DropdownButton<String>(
-                              value: loaded.languageCode,
-                              onChanged: (value) {
-                                if (value != null) {
-                                  ref
-                                      .read(settingsControllerProvider.notifier)
-                                      .updateLanguage(value);
-                                }
-                              },
-                              items: AppStrings.supportedLocales
-                                  .map(
-                                    (locale) => DropdownMenuItem(
-                                      value: locale.languageCode,
-                                      child: Text(
-                                        locale.languageCode.toUpperCase(),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(growable: false),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional.centerEnd,
+                                child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  value: loaded.languageCode,
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      ref
+                                          .read(
+                                            settingsControllerProvider.notifier,
+                                          )
+                                          .updateLanguage(value);
+                                    }
+                                  },
+                                  items: AppStrings.supportedLocales
+                                      .map(
+                                        (locale) => DropdownMenuItem(
+                                          value: locale.languageCode,
+                                          child: Text(
+                                            LanguageNativeNames.labelFor(
+                                              locale.languageCode,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(growable: false),
+                                ),
+                              ),
                             ),
                           ],
                         ),
