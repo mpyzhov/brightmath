@@ -1,0 +1,3 @@
+-- Refresh static question content so easy chapters do not include negative
+-- numbers in correct answers or option pools. DatabaseSeedService reloads the
+-- SQL seed content after this migration during app upgrade.

@@ -1,0 +1,3 @@
+-- Refresh static question content so prompts/right expressions do not include
+-- standalone numeric zero arguments. DatabaseSeedService reloads the SQL seed
+-- content after this migration during app upgrade.

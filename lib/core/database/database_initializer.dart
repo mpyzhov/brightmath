@@ -1,16 +1,21 @@
-import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseInitializer {
-  static const _schemaAssetPath =
-      'lib/core/database/migrations/001_initial_schema.sql';
+import 'database_manifest.dart';
+import 'database_script_runner.dart';
 
-  String? _cachedSchema;
+class DatabaseInitializer {
+  DatabaseInitializer({
+    DatabaseScriptRunner? scriptRunner,
+    Future<DatabaseManifest> Function()? loadManifest,
+  }) : _scriptRunner = scriptRunner ?? DatabaseScriptRunner(),
+       _loadManifest = loadManifest ?? DatabaseManifest.load;
+
+  final DatabaseScriptRunner _scriptRunner;
+  final Future<DatabaseManifest> Function() _loadManifest;
 
   Future<void> initialize(Database db) async {
-    for (final statement in await _schemaStatements()) {
-      await db.execute(statement);
-    }
+    final manifest = await _loadManifest();
+    await _scriptRunner.runFiles(db, manifest.createScripts);
   }
 
   Future<void> upgrade(Database db, int oldVersion, int newVersion) async {
@@ -34,27 +39,24 @@ class DatabaseInitializer {
       column: 'is_skipped',
       declaration: 'INTEGER NOT NULL DEFAULT 0',
     );
-  }
-
-  Future<List<String>> _schemaStatements() async {
-    final script = _cachedSchema ??= await rootBundle.loadString(
-      _schemaAssetPath,
+    await _addColumnIfMissing(
+      db,
+      table: 'questions',
+      column: 'question_key',
+      declaration: 'TEXT',
     );
-    final buffer = StringBuffer();
-    for (final line in script.split('\n')) {
-      final trimmed = line.trimLeft();
-      if (trimmed.startsWith('--')) {
-        continue;
-      }
-      buffer.writeln(line);
-    }
+    await _addColumnIfMissing(
+      db,
+      table: 'questions',
+      column: 'content_version',
+      declaration: 'INTEGER NOT NULL DEFAULT 1',
+    );
 
-    return buffer
-        .toString()
-        .split(';')
-        .map((statement) => statement.trim())
-        .where((statement) => statement.isNotEmpty)
-        .toList(growable: false);
+    final manifest = await _loadManifest();
+    await _scriptRunner.runFiles(
+      db,
+      manifest.upgradeScriptsFor(oldVersion, newVersion),
+    );
   }
 
   Future<void> _addColumnIfMissing(

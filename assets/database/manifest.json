@@ -1,0 +1,101 @@
+{
+  "databaseVersion": 9,
+  "createScripts": [
+    "assets/database/migrations/001_initial_schema.sql"
+  ],
+  "initialContentScripts": [
+    "assets/database/init/chapters.sql",
+    "assets/database/init/questions/001_add_whole_easy.sql",
+    "assets/database/init/questions/002_add_whole_medium.sql",
+    "assets/database/init/questions/003_add_whole_hard.sql",
+    "assets/database/init/questions/004_sub_whole_easy.sql",
+    "assets/database/init/questions/005_sub_whole_medium.sql",
+    "assets/database/init/questions/006_sub_whole_hard.sql",
+    "assets/database/init/questions/007_mul_whole_easy.sql",
+    "assets/database/init/questions/008_mul_whole_medium.sql",
+    "assets/database/init/questions/009_mul_whole_hard.sql",
+    "assets/database/init/questions/010_div_whole_easy.sql",
+    "assets/database/init/questions/011_div_whole_medium.sql",
+    "assets/database/init/questions/012_div_whole_hard.sql",
+    "assets/database/init/questions/013_compare_whole_frac_easy.sql",
+    "assets/database/init/questions/014_compare_whole_frac_medium.sql",
+    "assets/database/init/questions/015_compare_whole_frac_hard.sql",
+    "assets/database/init/questions/016_add_frac_easy.sql",
+    "assets/database/init/questions/017_add_frac_medium.sql",
+    "assets/database/init/questions/018_add_frac_hard.sql",
+    "assets/database/init/questions/019_sub_frac_easy.sql",
+    "assets/database/init/questions/020_sub_frac_medium.sql",
+    "assets/database/init/questions/021_sub_frac_hard.sql",
+    "assets/database/init/questions/022_mul_frac_easy.sql",
+    "assets/database/init/questions/023_mul_frac_medium.sql",
+    "assets/database/init/questions/024_mul_frac_hard.sql",
+    "assets/database/init/questions/025_frac_convert_easy.sql",
+    "assets/database/init/questions/026_frac_convert_medium.sql",
+    "assets/database/init/questions/027_frac_convert_hard.sql",
+    "assets/database/init/questions/028_frac_simplify_easy.sql",
+    "assets/database/init/questions/029_frac_simplify_medium.sql",
+    "assets/database/init/questions/030_frac_simplify_hard.sql",
+    "assets/database/init/questions/031_compare_ops_easy.sql",
+    "assets/database/init/questions/032_compare_ops_medium.sql",
+    "assets/database/init/questions/033_compare_ops_hard.sql",
+    "assets/database/init/questions/034_percent_easy.sql",
+    "assets/database/init/questions/035_percent_medium.sql",
+    "assets/database/init/questions/036_percent_hard.sql",
+    "assets/database/init/questions/037_power_easy.sql",
+    "assets/database/init/questions/038_power_medium.sql",
+    "assets/database/init/questions/039_power_hard.sql",
+    "assets/database/init/questions/040_sqrt_easy.sql",
+    "assets/database/init/questions/041_sqrt_medium.sql",
+    "assets/database/init/questions/042_sqrt_hard.sql",
+    "assets/database/init/questions/043_paren_easy.sql",
+    "assets/database/init/questions/044_paren_medium.sql",
+    "assets/database/init/questions/045_paren_hard.sql",
+    "assets/database/init/questions/046_nested_paren_easy.sql",
+    "assets/database/init/questions/047_nested_paren_medium.sql",
+    "assets/database/init/questions/048_nested_paren_hard.sql",
+    "assets/database/init/questions/049_compare_paren_easy.sql",
+    "assets/database/init/questions/050_compare_paren_medium.sql",
+    "assets/database/init/questions/051_compare_paren_hard.sql",
+    "assets/database/init/questions/052_mixed_1_easy.sql",
+    "assets/database/init/questions/053_mixed_1_medium.sql",
+    "assets/database/init/questions/054_mixed_1_hard.sql",
+    "assets/database/init/questions/055_mixed_2_easy.sql",
+    "assets/database/init/questions/056_mixed_2_medium.sql",
+    "assets/database/init/questions/057_mixed_2_hard.sql",
+    "assets/database/init/questions/058_mixed_final_easy.sql",
+    "assets/database/init/questions/059_mixed_final_medium.sql",
+    "assets/database/init/questions/060_mixed_final_hard.sql"
+  ],
+  "upgrades": [
+    {
+      "version": 5,
+      "scripts": [
+        "assets/database/migrations/005_static_question_bank.sql"
+      ]
+    },
+    {
+      "version": 6,
+      "scripts": [
+        "assets/database/migrations/006_refresh_option_pools.sql"
+      ]
+    },
+    {
+      "version": 7,
+      "scripts": [
+        "assets/database/migrations/007_refresh_easy_non_negative.sql"
+      ]
+    },
+    {
+      "version": 8,
+      "scripts": [
+        "assets/database/migrations/008_refresh_zero_free_questions.sql"
+      ]
+    },
+    {
+      "version": 9,
+      "scripts": [
+        "assets/database/migrations/009_refresh_addition_positive_options.sql"
+      ]
+    }
+  ]
+}

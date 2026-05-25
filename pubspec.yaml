@@ -65,7 +65,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - lib/core/database/migrations/001_initial_schema.sql
+    - assets/database/
+    - assets/database/migrations/
+    - assets/database/init/
+    - assets/database/init/questions/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

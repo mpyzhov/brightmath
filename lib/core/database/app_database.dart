@@ -8,7 +8,6 @@ import '../../features/quiz/domain/question_models.dart';
 import 'chapters_dao.dart';
 import 'database_initializer.dart';
 import 'database_seed_service.dart';
-import 'question_bank_generator.dart';
 import 'quiz_dao.dart';
 
 class AppDatabase {
@@ -18,8 +17,7 @@ class AppDatabase {
     ChaptersDao? chaptersDao,
     QuizDao? quizDao,
   }) : _initializer = initializer ?? DatabaseInitializer(),
-       _seedService =
-           seedService ?? DatabaseSeedService(QuestionBankGenerator()),
+       _seedService = seedService ?? DatabaseSeedService(),
        _chaptersDao = chaptersDao ?? ChaptersDao(),
        _quizDao = quizDao ?? QuizDao();
 
@@ -29,7 +27,6 @@ class AppDatabase {
   final QuizDao _quizDao;
 
   Database? _db;
-  bool _repairedQuestionBank = false;
 
   Future<Database> get database async {
     if (_db != null) {
@@ -38,14 +35,10 @@ class AppDatabase {
     final dbPath = await getDatabasesPath();
     _db = await openDatabase(
       p.join(dbPath, 'brightmath.db'),
-      version: 4,
+      version: 9,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
-    if (!_repairedQuestionBank) {
-      await _seedService.repairQuestionBank(_db!);
-      _repairedQuestionBank = true;
-    }
     return _db!;
   }
 

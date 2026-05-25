@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 enum QuizMode { multipleChoice, comparison }
 
 enum ChapterDifficulty { easy, medium, hard }
@@ -27,7 +25,6 @@ enum ChapterKind {
   mixedFinal,
 }
 
-@immutable
 class ChapterDefinition {
   const ChapterDefinition({
     required this.id,
@@ -50,7 +47,6 @@ class ChapterDefinition {
   final QuizMode quizMode;
 }
 
-@immutable
 class ChapterProgress {
   const ChapterProgress({
     required this.chapterId,
@@ -69,7 +65,6 @@ class ChapterProgress {
   final int bestStars;
 }
 
-@immutable
 class ChapterView {
   const ChapterView({required this.definition, required this.progress});
 

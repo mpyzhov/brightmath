@@ -1,0 +1,3 @@
+-- Refresh static question content so multiple-choice options are stored as
+-- incorrect-option pools. DatabaseSeedService reloads the SQL seed content
+-- after this migration during app upgrade.

@@ -1,0 +1,3 @@
+-- Refresh static question content so easy/medium whole-number addition option
+-- pools do not include zero or negative values. DatabaseSeedService reloads
+-- the SQL seed content after this migration during app upgrade.

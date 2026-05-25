@@ -14,32 +14,38 @@ class QuizDao {
     int count = 20,
     Random? random,
   }) async {
-    final rows = await db.query(
-      'questions',
-      where: 'chapter_id = ?',
-      whereArgs: [chapterId],
-      columns: [
-        'id',
-        'chapter_id',
-        'prompt',
-        'right_expr',
-        'correct_answer',
-        'options',
-      ],
+    final rows = await db.rawQuery(
+      '''
+      SELECT q.id, q.chapter_id, q.prompt, q.right_expr, q.correct_answer,
+             q.options, c.quiz_mode
+      FROM questions q
+      JOIN chapters c ON c.id = q.chapter_id
+      WHERE q.chapter_id = ?
+      ORDER BY q.question_key ASC
+      ''',
+      [chapterId],
     );
     final rng = random ?? Random();
     final picked = pickRandomUnique(rows, count, rng);
-    final chapter = chapterDefinitions.firstWhere((c) => c.id == chapterId);
     return picked
         .map((row) {
+          final mode = QuizMode.values.byName(row['quiz_mode'] as String);
+          final correctAnswer = row['correct_answer'] as String;
+          final storedOptions = (row['options'] as String).split('|');
           return QuizQuestion(
             id: row['id'] as int,
             chapterId: row['chapter_id'] as int,
             prompt: row['prompt'] as String,
             rightExpression: row['right_expr'] as String?,
-            mode: chapter.quizMode,
-            correctAnswer: row['correct_answer'] as String,
-            options: (row['options'] as String).split('|'),
+            mode: mode,
+            correctAnswer: correctAnswer,
+            options: mode == QuizMode.comparison
+                ? storedOptions
+                : buildAnswerOptions(
+                    incorrectOptions: storedOptions,
+                    correctAnswer: correctAnswer,
+                    random: rng,
+                  ),
           );
         })
         .toList(growable: false);

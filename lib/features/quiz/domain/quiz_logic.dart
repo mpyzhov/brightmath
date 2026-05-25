@@ -18,3 +18,24 @@ List<T> pickRandomUnique<T>(List<T> source, int count, Random random) {
   copy.shuffle(random);
   return copy.take(count).toList(growable: false);
 }
+
+List<String> buildAnswerOptions({
+  required List<String> incorrectOptions,
+  required String correctAnswer,
+  required Random random,
+  int incorrectCount = 3,
+}) {
+  final uniqueIncorrect = incorrectOptions
+      .where((option) => option != correctAnswer)
+      .toSet()
+      .toList(growable: false);
+  final pickedIncorrect = pickRandomUnique(
+    uniqueIncorrect,
+    incorrectCount,
+    random,
+  );
+  return ([
+    ...pickedIncorrect,
+    correctAnswer,
+  ]..shuffle(random)).toList(growable: false);
+}

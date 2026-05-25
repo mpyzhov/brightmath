@@ -29,4 +29,35 @@ void main() {
       expect(selected.toSet().length, selected.length);
     });
   });
+
+  group('buildAnswerOptions', () {
+    test('selects up to three incorrect options plus correct answer', () {
+      final options = buildAnswerOptions(
+        incorrectOptions: List.generate(10, (i) => '${i + 1}'),
+        correctAnswer: '42',
+        random: Random(7),
+      );
+
+      expect(options, hasLength(4));
+      expect(options, contains('42'));
+      expect(options.toSet(), hasLength(4));
+      expect(options.where((option) => option != '42'), hasLength(3));
+    });
+
+    test('returns deterministic option order with same seed', () {
+      final incorrect = List.generate(10, (i) => '${i + 1}');
+      final a = buildAnswerOptions(
+        incorrectOptions: incorrect,
+        correctAnswer: '42',
+        random: Random(99),
+      );
+      final b = buildAnswerOptions(
+        incorrectOptions: incorrect,
+        correctAnswer: '42',
+        random: Random(99),
+      );
+
+      expect(a, b);
+    });
+  });
 }

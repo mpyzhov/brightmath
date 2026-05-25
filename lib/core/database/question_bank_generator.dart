@@ -210,7 +210,7 @@ class QuestionBankGenerator {
         return _mc('$base^$exp', pow(base, exp).toInt().toString(), rng);
       case ChapterKind.squareRoot:
         final root = difficulty == ChapterDifficulty.easy
-            ? rng.nextInt(12) + 1
+            ? rng.nextInt(25) + 1
             : (difficulty == ChapterDifficulty.medium
                   ? rng.nextInt(25) + 1
                   : rng.nextInt(70) + 1);
@@ -276,23 +276,62 @@ class QuestionBankGenerator {
   }
 
   GeneratedQuestion _mc(String prompt, String correct, Random rng) {
-    final options = <String>{correct};
-    while (options.length < 4) {
-      final delta = rng.nextInt(9) - 4;
-      final value = int.tryParse(correct);
-      if (value != null) {
-        options.add((value + delta).toString());
-      } else {
-        options.add('$correct${rng.nextInt(4) + 1}');
-      }
-    }
-    final optionList = options.toList()..shuffle(rng);
     return GeneratedQuestion(
       prompt: prompt,
       rightExpression: null,
       correctAnswer: correct,
-      options: optionList,
+      options: _incorrectOptions(correct),
     );
+  }
+
+  List<String> _incorrectOptions(String correct) {
+    final options = <String>{};
+    final integer = int.tryParse(correct);
+    if (integer != null) {
+      for (var delta = 1; delta <= 5; delta++) {
+        options
+          ..add((integer - delta).toString())
+          ..add((integer + delta).toString());
+      }
+      return options.take(10).toList(growable: false);
+    }
+
+    final decimal = double.tryParse(correct);
+    if (decimal != null) {
+      final precision = correct.contains('.')
+          ? correct.split('.').last.length
+          : 0;
+      final step = precision >= 2 ? 0.01 : 0.1;
+      for (var delta = 1; delta <= 5; delta++) {
+        options
+          ..add((decimal - step * delta).toStringAsFixed(precision))
+          ..add((decimal + step * delta).toStringAsFixed(precision));
+      }
+      options.remove(correct);
+      return options.take(10).toList(growable: false);
+    }
+
+    final fraction = RegExp(r'^(-?\d+)/(\d+)$').firstMatch(correct);
+    if (fraction != null) {
+      final numerator = int.parse(fraction.group(1)!);
+      final denominator = int.parse(fraction.group(2)!);
+      for (var delta = 1; delta <= 5; delta++) {
+        options
+          ..add(_reduceFraction(numerator - delta, denominator))
+          ..add(_reduceFraction(numerator + delta, denominator))
+          ..add(_reduceFraction(numerator, denominator + delta));
+        if (denominator - delta > 0) {
+          options.add(_reduceFraction(numerator, denominator - delta));
+        }
+      }
+      options.remove(correct);
+      return options.take(10).toList(growable: false);
+    }
+
+    for (var i = 1; i <= 10; i++) {
+      options.add('$correct $i');
+    }
+    return options.toList(growable: false);
   }
 
   GeneratedQuestion _compare(String left, String right) {

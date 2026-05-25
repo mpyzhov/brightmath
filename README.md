@@ -1,16 +1,26 @@
-# brightmath
+# BrightMath
 
-A new Flutter project.
+BrightMath is a mobile-first Flutter app for relaxed math practice.
 
-## Getting Started
+## Database Content
 
-This project is a starting point for a Flutter application.
+SQLite schema and seed content are shipped as SQL assets under
+`assets/database/`.
 
-A few resources to get you started if this is your first Flutter project:
+- `assets/database/manifest.json` defines the database version and exact script
+  execution order.
+- `assets/database/migrations/` contains schema and forward migration scripts.
+- `assets/database/init/chapters.sql` seeds chapter metadata.
+- `assets/database/init/questions/` contains one generated SQL seed file per
+  chapter.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Questions are generated at development time, then committed as SQL so all
+devices initialize from the same content.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+dart run tool/generate_database_sql.dart
+dart run tool/validate_database_sql.dart
+dart format .
+dart analyze
+flutter test
+```

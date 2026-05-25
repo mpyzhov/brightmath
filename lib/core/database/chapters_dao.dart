@@ -129,20 +129,20 @@ class ChaptersDao {
     await db.transaction((txn) async {
       await txn.delete('attempt_answers');
       await txn.delete('attempts');
-      for (final chapter in chapterDefinitions) {
-        await txn.update(
-          'progress',
-          {
-            'is_unlocked': chapter.orderIndex == 1 ? 1 : 0,
-            'is_completed': 0,
-            'is_skipped': 0,
-            'best_score': 0,
-            'best_stars': 0,
-          },
-          where: 'chapter_id = ?',
-          whereArgs: [chapter.id],
-        );
-      }
+      await txn.update('progress', {
+        'is_unlocked': 0,
+        'is_completed': 0,
+        'is_skipped': 0,
+        'best_score': 0,
+        'best_stars': 0,
+      });
+      await txn.rawUpdate('''
+        UPDATE progress
+        SET is_unlocked = 1
+        WHERE chapter_id = (
+          SELECT id FROM chapters ORDER BY order_index ASC LIMIT 1
+        )
+      ''');
     });
   }
 
