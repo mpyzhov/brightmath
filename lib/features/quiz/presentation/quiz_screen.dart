@@ -32,6 +32,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
   static const double _optionSlotHeight = 66;
   static const double _optionsGridHeight = 148;
 
+  bool _countdownHidden = false;
+
   @override
   void initState() {
     super.initState();
@@ -65,31 +67,39 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
   }
 
   Widget _buildCountdownCircle(int remainingMillis) {
-    final progress = remainingMillis / QuizController.countdownDurationMs;
+    final targetProgress =
+        remainingMillis / QuizController.countdownDurationMs;
     final seconds = (remainingMillis / 1000).ceil().clamp(0, 3);
-    return SizedBox(
-      width: 26,
-      height: 26,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CircularProgressIndicator(
-            value: progress,
-            strokeWidth: 2.6,
-            strokeCap: StrokeCap.round,
-            color: Colors.white,
-            backgroundColor: Colors.white.withValues(alpha: 0.28),
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(end: targetProgress),
+      duration: const Duration(milliseconds: 120),
+      curve: Curves.linear,
+      builder: (context, progress, _) {
+        return SizedBox(
+          width: 26,
+          height: 26,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              CircularProgressIndicator(
+                value: progress,
+                strokeWidth: 2.6,
+                strokeCap: StrokeCap.round,
+                color: Colors.white,
+                backgroundColor: Colors.white.withValues(alpha: 0.28),
+              ),
+              Text(
+                '$seconds',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
-          Text(
-            '$seconds',
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -101,6 +111,16 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
     ) {
       if (previous?.completedResult == null && next.completedResult != null) {
         widget.onFinish(next.completedResult!);
+      }
+      // Hide countdown as soon as the question is unlocked (covers both
+      // auto-advance and manual press before the state propagates).
+      if (previous?.isLocked == true && next.isLocked == false) {
+        setState(() => _countdownHidden = true);
+      }
+      // Reveal countdown only when the next answer is selected (isLocked
+      // becomes true again), at which point the button fades back in.
+      if (previous?.isLocked == false && next.isLocked == true) {
+        setState(() => _countdownHidden = false);
       }
     });
 
@@ -353,8 +373,11 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
                     opacity: runState.isLocked ? 1 : 0,
                     duration: const Duration(milliseconds: 180),
                     curve: Curves.easeOut,
-                    child: FilledButton(
-                      onPressed: () => unawaited(controller.nextOrFinish()),
+                      child: FilledButton(
+                      onPressed: () {
+                        setState(() => _countdownHidden = true);
+                        unawaited(controller.nextOrFinish());
+                      },
                       style: FilledButton.styleFrom(
                         backgroundColor: AppTheme.teal,
                         shape: RoundedRectangleBorder(
@@ -363,11 +386,28 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(strings.t('next')),
-                          const SizedBox(width: 10),
-                          _buildCountdownCircle(runState.remainingMillis),
+                          const SizedBox(width: 42),
+                          Expanded(
+                            child: Text(
+                              strings.t('next'),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            child: _countdownHidden
+                                ? null
+                                : Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 16),
+                                      child: _buildCountdownCircle(
+                                        runState.remainingMillis,
+                                      ),
+                                    ),
+                                  ),
+                          ),
                         ],
                       ),
                     ),
